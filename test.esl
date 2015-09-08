@@ -1,0 +1,31 @@
+(= runTest (function (name func)
+ ((require "tape") name (function (t)
+                                  (func t)
+                                  ((. t end)))))) ; Automatically end tests
+
+(= eslc
+ (function (code)
+           (= fullCode ; wrap in a call
+              (+ "(macro fun (require \"./index.js\"))"
+                 code))
+           (return ((require "eslisp") fullCode))))
+
+(macro test
+ (function (name body)
+  (return `(runTest ,name (function (t) ,@body)))))
+
+; - - -
+
+(test "normal"
+      (((. t equals)
+        (eslc "(fun (x y) (x y))")
+        "(function (x, y) {\n    x(y);\n});")))
+
+(test "normal and splat argument"
+      (((. t equals)
+        (eslc "(fun (x ...y) (x y))")
+        "(function (x) {\n    var y = Array.prototype.slice.call(arguments, 1);\n    x(y);\n})")))
+(test "splat argument"
+      (((. t equals)
+        (eslc "(fun (...x) (x))")
+        "(function () {\n    var x = Array.prototype.slice.call(x);\n    x();\n})")))

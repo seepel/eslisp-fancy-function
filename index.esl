@@ -1,0 +1,36 @@
+(= prelude (require "prelude-ls"))
+(= breakList (. prelude breakList))
+
+(= isSplat (function (x) (return (== 0 ((. x atom indexOf) "...")))))
+
+(:= (. module exports)
+    (function
+      ()
+
+      (= prependStatements (array))
+
+      (= args ((. Array prototype slice call) arguments 0))
+      (= functionArgs (. args 0))
+      (= functionBody ((. args slice) 1))
+
+
+      (= breakResults (breakList isSplat functionArgs))
+
+      (= nonSplatFunctionArgs (. breakResults 0))
+      (= splatFunctionArgNames ((. breakResults 1 map)
+                                (function (x) (return ((. x atom slice) 3)))))
+
+      (if (> (. ((. splatFunctionArgNames filter) (function (x) (return isSplat x)))
+                length)
+             1)
+        ( (throw (Error "too many splats in function arguments (expected <=1)")) ))
+
+      (= n (. nonSplatFunctionArgs length))
+
+      ; a b c
+      ; ...a
+      ; a ...b
+      ; a ...b c
+
+      (return `(,(object atom "function") ,nonSplatFunctionArgs ,@prependStatements ,@functionBody))
+))

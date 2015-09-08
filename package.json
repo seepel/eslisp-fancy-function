@@ -1,0 +1,22 @@
+{
+  "name": "eslisp-fancy-function",
+  "version": "0.1.0",
+  "description": "eslisp function macro with rest arguments and implicit return",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test",
+    "prepublish": "make"
+  },
+  "author": "Anko <an@cyan.io> (http://an.cyan.io)",
+  "license": "ISC",
+  "devDependencies": {
+    "eslisp": "^0.2.2",
+    "tape": "^4.0.0"
+  },
+  "peerDependencies": {
+    "eslisp": "0.2.2"
+  },
+  "dependencies": {
+    "prelude-ls": "^1.1.2"
+  }
+}
