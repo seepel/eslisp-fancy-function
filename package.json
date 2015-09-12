@@ -10,14 +10,15 @@
   "author": "Anko <an@cyan.io> (http://an.cyan.io)",
   "license": "ISC",
   "devDependencies": {
-    "eslisp": "^0.2.3",
+    "eslisp": "^0.2.4",
+    "eslisp-camelify": "file:../eslisp-camelify",
+    "eslisp-propertify": "file:../eslisp-propertify",
     "tape": "^4.0.0"
   },
   "peerDependencies": {
-    "eslisp": "0.2.3"
+    "eslisp": "0.2.3 - 0.2.4"
   },
   "dependencies": {
-    "eslisp-propertify": "file:../eslisp-propertify",
     "prelude-ls": "^1.1.2"
   }
 }

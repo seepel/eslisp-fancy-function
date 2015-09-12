@@ -1,41 +1,46 @@
+(macro __camelify (require "eslisp-camelify"))
+(__camelify
 (macro __propertify (require "eslisp-propertify"))
 (__propertify
 
 (= prelude (require "prelude-ls"))
-(= breakList prelude.breakList)
+(= break-list prelude.break-list)
 
-(= isSplat (function (x) (return (== 0 (x.atom.indexOf "...")))))
+(= is-splat (function (x) (return (== 0 (x.atom.indexOf "...")))))
 
-(:= (. module exports)
+(:= module.exports
     (function
       ()
 
-      (= prependStatements (array))
+      (= prepend-statements (array))
 
       (= args (Array.prototype.slice.call arguments 0))
-      (= functionArgs args.0)
-      (= functionBody (args.slice 1))
+      (= function-args args.0)
+      (= function-body (args.slice 1))
 
 
-      (= breakResults (breakList isSplat functionArgs))
+      (= break-results (break-list is-splat function-args))
 
-      (= nonSplatFunctionArgs breakResults.0)
-      (= splatFunctionArgNames (breakResults.1.map
+      (= non-splat-function-args break-results.0)
+      (= splat-function-arg-names (break-results.1.map
                                 (function (x) (return (x.atom.slice 3)))))
 
-      (if (> (. ((. splatFunctionArgNames filter) (function (x) (return isSplat x)))
+      (if (> (. (splat-function-arg-names.filter (function
+                                                   (x)
+                                                   (return is-splat x)))
                 length)
              1)
         ( (throw (Error "too many splats in function arguments (expected <=1)")) ))
 
-      (= n nonSplatFunctionArgs.length)
+      (= n non-splat-function-args.length)
 
       ; a b c
       ; ...a
       ; a ...b
       ; a ...b c
 
-      (return `(,(object atom "function") ,nonSplatFunctionArgs ,@prependStatements ,@functionBody))
+      (return `(,(object atom "function") ,non-splat-function-args ,@prepend-statements ,@function-body))
 ))
 
+)
 )
