@@ -2,10 +2,7 @@ export PATH := node_modules/.bin:$(PATH)
 
 all: index.js
 
-index.js: index.esl
-	eslc < $< > $@
-
-test.js: test.esl
+%.js: %.esl
 	eslc < $< > $@
 
 test: index.js test.js

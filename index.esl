@@ -23,7 +23,7 @@
 
       (= non-splat-function-args break-results.0)
       (= splat-function-arg-names (break-results.1.map
-                                (function (x) (return (x.atom.slice 3)))))
+                                    (function (x) (return (x.atom.slice 3)))))
 
       (if (> (. (splat-function-arg-names.filter (function
                                                    (x)
