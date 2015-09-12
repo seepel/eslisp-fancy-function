@@ -36,6 +36,10 @@
 
          (prepend-statements.push splat-slice-call)
 
+         (after-splat.for-each
+           (function (x i)
+                     (prepend-statements.push `(= ,x (. arguments ,(+ i before-splat.length 1))))))
+
          ; a b c
          ; ...a
          ; a ...b
