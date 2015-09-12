@@ -16,23 +16,31 @@
 
       (= break-results (break-list is-splat function-args))
 
-      (= non-splat-function-args break-results.0)
-      (= splat-function-arg-names (break-results.1.map
-                                    (function (x) (return (x.atom.slice 3)))))
+      (= before-splat break-results.0)
 
-      (if (> (. (splat-function-arg-names.filter (function
-                                                   (x)
-                                                   (return is-splat x)))
-                length)
-             1)
+      (= splat-and-after break-results.1)
+
+      (= n-splats (. (splat-and-after.filter is-splat) length))
+      (if (> n-splats 1)
         ( (throw (Error "too many splats in function arguments (expected <=1)")) ))
 
-      (= n non-splat-function-args.length)
+      (= splat splat-and-after.0)
+      (if splat
+        (
+         (= after-splat (splat-and-after.slice 1))
 
-      ; a b c
-      ; ...a
-      ; a ...b
-      ; a ...b c
+         (= splat-name (splat.atom.slice 3))
+         (= splat-start before-splat.length)
+         (= splat-end (- function-args.length after-splat.length))
+         (= splat-slice-call `(= ,(object atom splat-name) ((. Array prototype slice call) arguments ,splat-start ,splat-end)))
 
-      (return `(,(object atom "function") ,non-splat-function-args ,@prepend-statements ,@function-body))
+         (prepend-statements.push splat-slice-call)
+
+         ; a b c
+         ; ...a
+         ; a ...b
+         ; a ...b c
+        ))
+
+      (return `(,(object atom "function") ,before-splat ,@prepend-statements ,@function-body))
 ))

@@ -24,7 +24,8 @@
 (test "normal and splat argument"
       ((t.equals
         (eslc "(fun (x ...y) (x y))")
-        "(function (x) {\n    var y = Array.prototype.slice.call(arguments, 1);\n    x(y);\n})")))
+        "(function (x) {\n    var y = Array.prototype.slice.call(arguments, 1, 2);\n    x(y);\n});")))
+
 (test "splat argument"
       ((t.equals
         (eslc "(fun (...x) (x))")
