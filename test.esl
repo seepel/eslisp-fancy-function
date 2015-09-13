@@ -24,14 +24,14 @@
 (test "normal and splat argument"
       ((t.equals
         (eslc "(fun (x ...y) (x y))")
-        "(function (x) {\n    var y = Array.prototype.slice.call(arguments, 1, 2);\n    x(y);\n});")))
+        "(function (x) {\n    var y = Array.prototype.slice.call(arguments, 1);\n    x(y);\n});")))
 
 (test "normal and splat argument and normals again"
       ((t.equals
         (eslc "(fun (x ...y z1 z2) (x y z1 z2))")
-        "(function (x) {\n    var y = Array.prototype.slice.call(arguments, 1, 2);\n    var z1 = arguments[2];\n    var z2 = arguments[3];\n    x(y, z1, z2);\n});")))
+        "(function (x) {\n    var y = Array.prototype.slice.call(arguments, 1, -2);\n    var z1 = arguments[arguments.length - 2];\n    var z2 = arguments[arguments.length - 1];\n    x(y, z1, z2);\n});")))
 
-(test "splat argument"
+(test "sole splat argument"
       ((t.equals
         (eslc "(fun (...x) (x))")
-        "(function () {\n    var x = Array.prototype.slice.call(x);\n    x();\n})")))
+        "(function () {\n    var x = Array.prototype.slice.call(arguments);\n    x();\n});")))

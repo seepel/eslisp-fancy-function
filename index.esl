@@ -25,26 +25,42 @@
         ( (throw (Error "too many splats in function arguments (expected <=1)")) ))
 
       (= splat splat-and-after.0)
+
       (if splat
         (
          (= after-splat (splat-and-after.slice 1))
-
          (= splat-name (splat.atom.slice 3))
-         (= splat-start before-splat.length)
-         (= splat-end (- function-args.length after-splat.length))
-         (= splat-slice-call `(= ,(object atom splat-name) ((. Array prototype slice call) arguments ,splat-start ,splat-end)))
+         (switch true
+                 ((== (+ before-splat.length after-splat.length) 0)
+                  (= splat-slice-call `(= ,(object atom splat-name)
+                                          ((. Array prototype slice call)
+                                           arguments)))
+                  (prepend-statements.push splat-slice-call)
+                  (break))
 
-         (prepend-statements.push splat-slice-call)
+                 ((== after-splat.length 0)
+                  (= splat-slice-call `(= ,(object atom splat-name)
+                                          ((. Array prototype slice call)
+                                           arguments ,before-splat.length)))
+                  (prepend-statements.push splat-slice-call)
+                  (break))
 
-         (after-splat.for-each
-           (function (x i)
-                     (prepend-statements.push `(= ,x (. arguments ,(+ i before-splat.length 1))))))
+                 (default
+                   (= splat-start before-splat.length)
+                   (= splat-end (- after-splat.length))
+                   (= splat-slice-call
+                      `(= ,(object atom splat-name)
+                          ((. Array prototype slice call)
+                           arguments ,splat-start ,splat-end)))
 
-         ; a b c
-         ; ...a
-         ; a ...b
-         ; a ...b c
-        ))
+                   (prepend-statements.push splat-slice-call)
 
-      (return `(,(object atom "function") ,before-splat ,@prepend-statements ,@function-body))
-))
+                   (after-splat.for-each
+                     (function (x i)
+                               (prepend-statements.push
+                                 `(= ,x (. arguments
+                                           (- arguments.length
+                                              ,(- after-splat.length i)))))))
+                   ))))
+
+      (return `(,(object atom "function") ,before-splat ,@prepend-statements ,@function-body))))
