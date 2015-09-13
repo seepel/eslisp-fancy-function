@@ -13,7 +13,6 @@
       (= function-args args.0)
       (= function-body (args.slice 1))
 
-
       (= break-results (break-list is-splat function-args))
 
       (= before-splat break-results.0)
