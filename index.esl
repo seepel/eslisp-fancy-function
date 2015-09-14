@@ -67,4 +67,13 @@
                                               ,(- after-splat.length i)))))))
                    ))))
 
+      ; If the last thing is an expression, add an implicit "return"
+      (= last-thing-in-body (function-body.pop))
+      (if last-thing-in-body ; Just in case the function body was empty
+        (
+          (= last-converted (?: (this.is-expr last-thing-in-body)
+                                `(return ,last-thing-in-body)
+                                last-thing-in-body))
+          (function-body.push last-converted)))
+
       (return `(function ,before-splat ,@prepend-statements ,@function-body))))
