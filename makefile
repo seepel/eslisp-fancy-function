@@ -17,6 +17,9 @@ all: index.js
 test: index.js test.js
 	node test.js
 
+test-readme: index.js test.js readme.md
+	txm readme.md
+
 clean:
 	rm -f index.js test.js
 

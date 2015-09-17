@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "make test",
+    "test-readme": "make test-readme",
     "prepublish": "make"
   },
   "author": "Anko <an@cyan.io> (http://an.cyan.io)",
@@ -13,7 +14,8 @@
     "eslisp": "^0.4.0",
     "eslisp-camelify": "file:../eslisp-camelify",
     "eslisp-propertify": "file:../eslisp-propertify",
-    "tape": "^4.0.0"
+    "tape": "^4.0.0",
+    "tests-ex-markdown": "^2.0.0"
   },
   "peerDependencies": {
     "eslisp": ">=0.2.1 <0.3.0 || 0.3.x || 0.4.x"
