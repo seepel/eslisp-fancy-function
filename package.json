@@ -12,8 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "eslisp": "^0.4.0",
-    "eslisp-camelify": "file:../eslisp-camelify",
-    "eslisp-propertify": "file:../eslisp-propertify",
+    "eslisp-camelify": "^0.1.1",
+    "eslisp-propertify": "^0.1.1",
     "tape": "^4.0.0",
     "tests-ex-markdown": "^2.0.0"
   },
