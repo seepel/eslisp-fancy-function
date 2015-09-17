@@ -1,4 +1,4 @@
-# eslisp-fancy-function
+# eslisp-fancy-function [![](https://img.shields.io/npm/v/eslisp-fancy-function.svg?style=flat-square)][1] [![](https://img.shields.io/travis/anko/eslisp-fancy-function.svg?style=flat-square)][2] [![](https://img.shields.io/badge/eslisp_chat-gitter_%E2%86%92-blue.svg?style=flat-square)][3]
 
 <!-- !test program
 sed 's/(require "eslisp-fancy-function")/(require "..\\/..\\/..\\/index.js")/' \
@@ -6,7 +6,7 @@ sed 's/(require "eslisp-fancy-function")/(require "..\\/..\\/..\\/index.js")/' \
 | head -c -1
 -->
 
-An [eslisp][1] macro that works like an the usual `function` expression macro
+An [eslisp][4] macro that works like an the usual `function` expression macro
 but also
 
 -   parses *splats* (atoms starting with `...`) in the arguments and turns them
@@ -30,12 +30,15 @@ but also
         return a * (b * d);
     });
 
-See [the tests][2] for fuller usage.
+See [the tests][5] for fuller usage.
 
 ## License
 
-[ISC][3].
+[ISC][6].
 
-[1]: https://www.npmjs.com/package/eslisp
-[2]: test.esl
-[3]: http://opensource.org/licenses/ISC
+[1]: https://www.npmjs.com/package/eslisp-fancy-function
+[2]: https://travis-ci.org/anko/eslisp-fancy-function
+[3]: https://gitter.im/anko/eslisp
+[4]: https://www.npmjs.com/package/eslisp
+[5]: test.esl
+[6]: http://opensource.org/licenses/ISC
