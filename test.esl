@@ -31,6 +31,11 @@
         (eslc "(fun (x y))")
         "(function (x, y) {\n});")))
 
+(test "normal with body containing if-statement (not returned)"
+      ((t.equals
+        (eslc "(fun (x y) (if x y))")
+        "(function (x, y) {\n    if (x)\n        y;\n});")))
+
 (test "normal and splat argument"
       ((t.equals
         (eslc "(fun (x ...y) (x y))")
