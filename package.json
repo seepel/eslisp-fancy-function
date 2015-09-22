@@ -11,7 +11,7 @@
   "author": "Anko <an@cyan.io> (http://an.cyan.io)",
   "license": "ISC",
   "devDependencies": {
-    "eslisp": "^0.4.0",
+    "eslisp": "^0.4.2",
     "eslisp-camelify": "^0.1.1",
     "eslisp-propertify": "^0.1.1",
     "tape": "^4.0.0",
