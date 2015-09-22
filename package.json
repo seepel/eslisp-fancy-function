@@ -13,7 +13,7 @@
   "devDependencies": {
     "eslisp": "^0.4.2",
     "eslisp-camelify": "^0.1.1",
-    "eslisp-propertify": "^0.1.1",
+    "eslisp-propertify": "^0.1.2",
     "tape": "^4.0.0",
     "tests-ex-markdown": "^2.0.0"
   },
