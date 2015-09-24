@@ -1,6 +1,6 @@
 {
   "name": "eslisp-fancy-function",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "eslisp function macro with rest arguments and implicit return",
   "main": "index.js",
   "scripts": {
