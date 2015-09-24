@@ -1,13 +1,13 @@
-(= run-test (function (name func)
+(var run-test (function (name func)
  ((require "tape") name (function (t)
                                   (func t)
                                   (t.end))))) ; Automatically end tests
 
-(= eslc
+(var eslc
  (function (code)
-           (= full-code ; wrap in a call
-              (+ "(macro fun (require \"./index.js\"))"
-                 code))
+           (var full-code ; wrap in a call
+                (+ "(macro fun (require \"./index.js\"))"
+                   code))
            (return ((require "eslisp") full-code))))
 
 (macro test
