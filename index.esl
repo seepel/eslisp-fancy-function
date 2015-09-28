@@ -1,10 +1,10 @@
 (var prelude (require "prelude-ls"))
 (var break-list prelude.break-list)
 
-(var is-splat (function (x) (return (== 0 (x.atom.indexOf "...")))))
+(var is-splat (lambda (x) (return (== 0 (x.atom.indexOf "...")))))
 
 (= module.exports
-   (function
+   (lambda
      ()
 
      (var prepend-statements (array))
@@ -34,16 +34,16 @@
                  ; Splat is the only argument: just slice all
                  ((== (+ before-splat.length after-splat.length) 0)
                   (var splat-slice-call `(var ,(object atom splat-name)
-                                          ((. Array prototype slice call)
-                                           arguments)))
+                                              ((. Array prototype slice call)
+                                               arguments)))
                   (prepend-statements.push splat-slice-call)
                   (break))
 
                  ; Splat is last argument: slice from there to end
                  ((== after-splat.length 0)
                   (var splat-slice-call `(var ,(object atom splat-name)
-                                          ((. Array prototype slice call)
-                                           arguments ,before-splat.length)))
+                                              ((. Array prototype slice call)
+                                               arguments ,before-splat.length)))
                   (prepend-statements.push splat-slice-call)
                   (break))
 
@@ -53,18 +53,18 @@
                    (var splat-start before-splat.length)
                    (var splat-end (- after-splat.length))
                    (var splat-slice-call
-                      `(var ,(object atom splat-name)
-                          ((. Array prototype slice call)
-                           arguments ,splat-start ,splat-end)))
+                        `(var ,(object atom splat-name)
+                              ((. Array prototype slice call)
+                               arguments ,splat-start ,splat-end)))
 
                    (prepend-statements.push splat-slice-call)
 
                    (after-splat.for-each
-                     (function (x i)
-                               (prepend-statements.push
-                                 `(var ,x (. arguments
-                                           (- arguments.length
-                                              ,(- after-splat.length i)))))))
+                     (lambda (x i)
+                       (prepend-statements.push
+                         `(var ,x (. arguments
+                                     (- arguments.length
+                                        ,(- after-splat.length i)))))))
                    ))))
 
      ; If the last thing is an expression, add an implicit "return"
@@ -72,8 +72,8 @@
      (if last-thing-in-body ; Just in case the function body was empty
        (block
          (var last-converted (?: (this.is-expr last-thing-in-body)
-                               `(return ,last-thing-in-body)
-                               last-thing-in-body))
+                                 `(return ,last-thing-in-body)
+                                 last-thing-in-body))
          (function-body.push last-converted)))
 
-     (return `(function ,before-splat ,@prepend-statements ,@function-body))))
+     (return `(lambda ,before-splat ,@prepend-statements ,@function-body))))

@@ -1,52 +1,53 @@
-(var run-test (function (name func)
- ((require "tape") name (function (t)
-                                  (func t)
-                                  (t.end))))) ; Automatically end tests
+(var run-test
+     (lambda (name func)
+       ((require "tape") name (lambda (t)
+                                (func t)
+                                (t.end))))) ; Automatically end tests
 
 (var eslc
- (function (code)
-           (var full-code ; wrap in a call
-                (+ "(macro fun (require \"./index.js\"))"
-                   code))
-           (return ((require "eslisp") full-code))))
+     (lambda (code)
+       (var full-code ; wrap in a call
+            (+ "(macro fun (require \"./index.js\"))"
+               code))
+       (return ((require "eslisp") full-code))))
 
 (macro test
- (function (name body)
-  (return `(run-test ,name (function (t) ,@body)))))
+       (lambda (name body)
+         (return `(run-test ,name (lambda (t) ,@body)))))
 
 ; - - -
 
 (test "normal"
       ((t.equals
-        (eslc "(fun (x y) (x y))")
-        "(function (x, y) {\n    return x(y);\n});")))
+         (eslc "(fun (x y) (x y))")
+         "(function (x, y) {\n    return x(y);\n});")))
 
 (test "normal with unreturnable last thing"
       ((t.equals
-        (eslc "(fun (x y) (if x y))")
-        "(function (x, y) {\n    if (x)\n        y;\n});")))
+         (eslc "(fun (x y) (if x y))")
+         "(function (x, y) {\n    if (x)\n        y;\n});")))
 
 (test "normal with empty body"
       ((t.equals
-        (eslc "(fun (x y))")
-        "(function (x, y) {\n});")))
+         (eslc "(fun (x y))")
+         "(function (x, y) {\n});")))
 
 (test "normal with body containing if-statement (not returned)"
       ((t.equals
-        (eslc "(fun (x y) (if x y))")
-        "(function (x, y) {\n    if (x)\n        y;\n});")))
+         (eslc "(fun (x y) (if x y))")
+         "(function (x, y) {\n    if (x)\n        y;\n});")))
 
 (test "normal and splat argument"
       ((t.equals
-        (eslc "(fun (x ...y) (x y))")
-        "(function (x) {\n    var y = Array.prototype.slice.call(arguments, 1);\n    return x(y);\n});")))
+         (eslc "(fun (x ...y) (x y))")
+         "(function (x) {\n    var y = Array.prototype.slice.call(arguments, 1);\n    return x(y);\n});")))
 
 (test "normal and splat argument and normals again"
       ((t.equals
-        (eslc "(fun (x ...y z1 z2) (x y z1 z2))")
-        "(function (x) {\n    var y = Array.prototype.slice.call(arguments, 1, -2);\n    var z1 = arguments[arguments.length - 2];\n    var z2 = arguments[arguments.length - 1];\n    return x(y, z1, z2);\n});")))
+         (eslc "(fun (x ...y z1 z2) (x y z1 z2))")
+         "(function (x) {\n    var y = Array.prototype.slice.call(arguments, 1, -2);\n    var z1 = arguments[arguments.length - 2];\n    var z2 = arguments[arguments.length - 1];\n    return x(y, z1, z2);\n});")))
 
 (test "sole splat argument"
       ((t.equals
-        (eslc "(fun (...x) (x))")
-        "(function () {\n    var x = Array.prototype.slice.call(arguments);\n    return x();\n});")))
+         (eslc "(fun (...x) (x))")
+         "(function () {\n    var x = Array.prototype.slice.call(arguments);\n    return x();\n});")))

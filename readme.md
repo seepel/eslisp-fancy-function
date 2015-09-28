@@ -6,12 +6,16 @@ sed 's/(require "eslisp-fancy-function")/(require "..\\/..\\/..\\/index.js")/' \
 | head -c -1
 -->
 
-An [eslisp][4] macro that works like an the usual `function` expression macro
-but also
+An [eslisp][4] macro that works like an the usual `lambda` expression macro but
+also
 
 -   parses *splats* (atoms starting with `...`) in the arguments and turns them
     into appropriate variable assignments prepended to the function body, and
 -   implicitly returns the last thing in the body if it's an expression.
+
+Note that despite the name, this module is strictly a *function expressions*
+(`lambda`-ish) macro, not a function declaration.  I'll rearrange that
+eventually.
 
 ## Example
 
