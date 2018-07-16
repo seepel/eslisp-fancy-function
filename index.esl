@@ -8,13 +8,17 @@
     (=== x.type "atom")
     (=== 0 (x.value.indexOf "..."))))))
 
-(function array-to-list (arr) (return (object
-  "type" "list"
-  "values" arr)))
+(function array-to-list (arr) 
+  (return (object
+    "type" "list"
+    "values" arr)))
 
 (= module.exports
    (lambda
      ()
+
+    ;; We'll need this later when we are inside a function with a different this...
+     (var atom this.atom)
 
      (var prepend-statements (array))
 
@@ -42,7 +46,7 @@
 
                  ; Splat is the only argument: just slice all
                  ((== (+ before-splat.length after-splat.length) 0)
-                  (var splat-slice-call `(var ,(this.atom splat-name)
+                  (var splat-slice-call `(var ,(atom splat-name)
                                               ((. Array prototype slice call)
                                                arguments)))
                   (prepend-statements.push splat-slice-call)
@@ -50,10 +54,10 @@
 
                  ; Splat is last argument: slice from there to end
                  ((== after-splat.length 0)
-                  (var splat-slice-call `(var ,(this.atom splat-name)
+                  (var splat-slice-call `(var ,(atom splat-name)
                                               ((. Array prototype slice call)
                                                arguments 
-                                               ,(this.atom before-splat.length))))
+                                               ,(atom before-splat.length))))
                   (prepend-statements.push splat-slice-call)
                   (break))
 
@@ -63,16 +67,14 @@
                    (var splat-start before-splat.length)
                    (var splat-end (- after-splat.length))
                    (var splat-slice-call
-                        `(var ,(this.atom splat-name)
+                        `(var ,(atom splat-name)
                               ((. Array prototype slice call)
-                               arguments ,(this.atom splat-start) 
-                               ,(this.atom splat-end))))
+                               arguments ,(atom splat-start) 
+                               ,(atom splat-end))))
 
                    (prepend-statements.push splat-slice-call)
 
 
-                   ;; Hoist atom creator
-                   (var atom this.atom)
                    (after-splat.for-each
                      (lambda (x i)
                        (prepend-statements.push

@@ -3,9 +3,7 @@
   "version": "0.2.0",
   "description": "eslisp function macro with rest arguments and implicit return",
   "main": "index.js",
-  "keywords": [
-    "eslisp-macro"
-  ],
+  "keywords": [ "eslisp-macro" ],
   "repository": "anko/eslisp-fancy-function",
   "scripts": {
     "test": "make test",
