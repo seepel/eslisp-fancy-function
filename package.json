@@ -3,7 +3,9 @@
   "version": "0.2.0",
   "description": "eslisp function macro with rest arguments and implicit return",
   "main": "index.js",
-  "keywords": ["eslisp-macro"],
+  "keywords": [
+    "eslisp-macro"
+  ],
   "repository": "anko/eslisp-fancy-function",
   "scripts": {
     "test": "make test",
@@ -13,9 +15,9 @@
   "author": "Anko <an@cyan.io> (http://an.cyan.io)",
   "license": "ISC",
   "devDependencies": {
-    "eslisp": "^0.6.0",
-    "eslisp-camelify": "^0.1.3",
-    "eslisp-propertify": "^0.1.4",
+    "eslisp": "^0.7.6",
+    "eslisp-camelify": "^0.4.0",
+    "eslisp-propertify": "^0.3.0",
     "tape": "^4.0.0",
     "tests-ex-markdown": "^2.0.0"
   },

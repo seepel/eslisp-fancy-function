@@ -1,7 +1,16 @@
 (var prelude (require "prelude-ls"))
 (var break-list prelude.break-list)
+(var esutils (require "esutils"))
 
-(var is-splat (lambda (x) (return (== 0 (x.atom.indexOf "...")))))
+(var is-splat (lambda (x) 
+  (return (&& 
+    (=== (typeof x) "object")
+    (=== x.type "atom")
+    (=== 0 (x.value.indexOf "..."))))))
+
+(function array-to-list (arr) (return (object
+  "type" "list"
+  "values" arr)))
 
 (= module.exports
    (lambda
@@ -13,7 +22,7 @@
      (var function-args args.0)
      (var function-body (args.slice 1))
 
-     (var break-results (break-list is-splat function-args))
+     (var break-results (break-list is-splat function-args.values))
 
      (var before-splat break-results.0)
 
@@ -28,12 +37,12 @@
      (if splat
        (block
          (var after-splat (splat-and-after.slice 1))
-         (var splat-name (splat.atom.slice 3))
+         (var splat-name (splat.value.slice 3))
          (switch true
 
                  ; Splat is the only argument: just slice all
                  ((== (+ before-splat.length after-splat.length) 0)
-                  (var splat-slice-call `(var ,(object atom splat-name)
+                  (var splat-slice-call `(var ,(this.atom splat-name)
                                               ((. Array prototype slice call)
                                                arguments)))
                   (prepend-statements.push splat-slice-call)
@@ -41,9 +50,10 @@
 
                  ; Splat is last argument: slice from there to end
                  ((== after-splat.length 0)
-                  (var splat-slice-call `(var ,(object atom splat-name)
+                  (var splat-slice-call `(var ,(this.atom splat-name)
                                               ((. Array prototype slice call)
-                                               arguments ,before-splat.length)))
+                                               arguments 
+                                               ,(this.atom before-splat.length))))
                   (prepend-statements.push splat-slice-call)
                   (break))
 
@@ -53,27 +63,34 @@
                    (var splat-start before-splat.length)
                    (var splat-end (- after-splat.length))
                    (var splat-slice-call
-                        `(var ,(object atom splat-name)
+                        `(var ,(this.atom splat-name)
                               ((. Array prototype slice call)
-                               arguments ,splat-start ,splat-end)))
+                               arguments ,(this.atom splat-start) 
+                               ,(this.atom splat-end))))
 
                    (prepend-statements.push splat-slice-call)
 
+
+                   ;; Hoist atom creator
+                   (var atom this.atom)
                    (after-splat.for-each
                      (lambda (x i)
                        (prepend-statements.push
-                         `(var ,x (. arguments
+                         `(var ,x (get arguments
                                      (- arguments.length
-                                        ,(- after-splat.length i)))))))
+                                        ,(atom (- after-splat.length i))))))))
                    ))))
 
      ; If the last thing is an expression, add an implicit "return"
      (var last-thing-in-body (function-body.pop))
      (if last-thing-in-body ; Just in case the function body was empty
        (block
-         (var last-converted (?: (this.is-expr last-thing-in-body)
+         (var last-converted (?: (esutils.ast.is-expression 
+                                   (this.compile last-thing-in-body))
                                  `(return ,last-thing-in-body)
                                  last-thing-in-body))
          (function-body.push last-converted)))
 
-     (return `(lambda ,before-splat ,@prepend-statements ,@function-body))))
+     (return `(lambda ,(array-to-list before-splat) 
+       ,@(array-to-list prepend-statements) 
+       ,@(array-to-list function-body)))))
