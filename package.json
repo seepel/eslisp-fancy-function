@@ -20,7 +20,7 @@
     "tests-ex-markdown": "^2.0.0"
   },
   "peerDependencies": {
-    "eslisp": "0.6.x"
+    "eslisp": ">=0.7.5"
   },
   "dependencies": {
     "prelude-ls": "^1.1.2"
